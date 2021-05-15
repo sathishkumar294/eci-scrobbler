@@ -5,7 +5,10 @@
     },
     "extends": [
         "plugin:react/recommended",
-        "airbnb"
+        "airbnb",
+        "plugin:prettier/recommended",
+        "unicorn",
+        "prettier/unicorn", // unicorn.js
     ],
     "parserOptions": {
         "ecmaFeatures": {
@@ -15,9 +18,12 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react",
+        "prettier",
+        "unicorn"
     ],
     "rules": {
-        "no-console": ["error", {"allow": ["info", "warn", "error" ]}]
+        "no-console": ["error", {"allow": ["info", "warn", "error" ]}],
+        "unicorn/prevent-abbreviations": "off"
     }
 }
