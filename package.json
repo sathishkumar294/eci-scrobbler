@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "scrap data from ECI website",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server/proxy.js"
@@ -23,7 +24,19 @@
   "homepage": "https://github.com/sathishkumar294/eci-scrobbler#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "cheerio": "^1.0.0-rc.9",
     "express": "^4.17.1",
-    "request": "^2.88.2"
+    "html-table-to-json": "^1.0.0",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6"
+  },
+  "devDependencies": {
+    "eslint": "^7.26.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-import": "^2.23.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "prettier": "^2.3.0"
   }
 }
