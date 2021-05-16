@@ -18,6 +18,17 @@ export function extractJSONFromHTML(html) {
   const trs = chData("#tabTable > tbody > tr").toArray();
   const data = trs.map((tr) => {
     const link = tr.children[0].children[0].attribs.href;
+    const matches = /Constituencywise([SU]\d{2})(\d+)\.htm\?ac=(\d+)/gm.exec(
+      link
+    );
+    let constituencyCode = "",
+      stateCode = "";
+    if (matches && matches.length >= 4) {
+      constituencyCode = matches[3];
+      stateCode = matches[1];
+    } else {
+      console.error("Cannot find code for link:", { link });
+    }
     const obj = {
       [headers[0]]: tr.children[0].children[0].children[0].data,
       [headers[1]]: tr.children[1].children[0].data,
@@ -27,6 +38,8 @@ export function extractJSONFromHTML(html) {
     return {
       ...obj,
       link,
+      constituencyCode,
+      stateCode,
     };
   });
 
