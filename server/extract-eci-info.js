@@ -75,16 +75,16 @@ export async function getAllConstituencyCandidateData() {
         constituencies[constiKey] = {
           constituency: record.Constituency,
           code: record.constituencyCode,
-          state: record.State,
+          stateCode: record.stateCode,
         };
       }
       const candiKey = `${i}-${record.constituencyCode}-${record.Candidate}-${record.Party}`;
       if (!candidates[candiKey]) {
         candidates[candiKey] = {
           candidate: record.Candidate,
-          constituency: record.Constituency,
+          constituencyCode: record.constituencyCode,
           party: record.Party,
-          state: record.State,
+          stateCode: record.stateCode,
         };
       } else {
         console.warn("Duplicate candidate: " + candiKey, { record });
