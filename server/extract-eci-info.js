@@ -66,7 +66,7 @@ export async function getAllConstituencyCandidateData() {
     const states = {};
     const candidates = {};
     const constituencies = {};
-    data.forEach((record) => {
+    data.forEach((record, i) => {
       if (!states[record.State]) {
         states[record.State] = { state: record.State, code: record.stateCode };
       }
@@ -78,7 +78,7 @@ export async function getAllConstituencyCandidateData() {
           state: record.State,
         };
       }
-      const candiKey = `${record.constituencyCode}-${record.Candidate}-${record.Party}`;
+      const candiKey = `${i}-${record.constituencyCode}-${record.Candidate}-${record.Party}`;
       if (!candidates[candiKey]) {
         candidates[candiKey] = {
           candidate: record.Candidate,
