@@ -6,6 +6,18 @@ export function getURLAsHTML(url) {
   // request({ url, method: 'GET' }).pipe((r) => r.text());
 }
 
+/**
+ *
+ * @param {string} html
+ * @returns {{
+ *  Party: string,
+ *  Constituency: string,
+ *  State: string,
+ *  constituencyCode: string,
+ *  stateCode: string,
+ *  Candidate: string
+ *  }[]}
+ */
 export function extractDataFromECISearchPage(html) {
   const regex = /<table ([\w\W]*)>([\w\W]*)<\/table>/gm;
   const matches = regex.exec(html);
@@ -58,19 +70,24 @@ export async function getAllConstituencyCandidateData() {
       if (!states[record.State]) {
         states[record.State] = { state: record.State, code: record.stateCode };
       }
-      if (!constituencies[record.Constituency]) {
-        constituencies[record.Constituency] = {
+      const constiKey = `${record.State}-${record.Constituency}-${record.constituencyCode}`;
+      if (!constituencies[constiKey]) {
+        constituencies[constiKey] = {
           constituency: record.Constituency,
           code: record.constituencyCode,
+          state: record.State,
         };
       }
-      if (!candidates[record.Candidate]) {
-        candidates[record.Candidate] = {
+      const candiKey = `${record.constituencyCode}-${record.Candidate}-${record.Party}`;
+      if (!candidates[candiKey]) {
+        candidates[candiKey] = {
           candidate: record.Candidate,
           constituency: record.Constituency,
           party: record.Party,
           state: record.State,
         };
+      } else {
+        console.warn("Duplicate candidate: " + candiKey, { record });
       }
     });
     return {
