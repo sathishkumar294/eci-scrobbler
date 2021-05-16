@@ -6,7 +6,7 @@ export function getURLAsHTML(url) {
   // request({ url, method: 'GET' }).pipe((r) => r.text());
 }
 
-export function extractJSONFromHTML(html) {
+export function extractDataFromECISearchPage(html) {
   const regex = /<table ([\w\W]*)>([\w\W]*)<\/table>/gm;
   const matches = regex.exec(html);
   const tableData = matches[1];
@@ -50,8 +50,37 @@ export async function getAllConstituencyCandidateData() {
   try {
     const url = "https://results.eci.gov.in/Result2021/search.htm";
     const html = await getURLAsHTML(url);
-    const data = extractJSONFromHTML(html);
-    return { data, success: true };
+    const data = extractDataFromECISearchPage(html);
+    const states = {};
+    const candidates = {};
+    const constituencies = {};
+    data.forEach((record) => {
+      if (!states[record.State]) {
+        states[record.State] = { state: record.State, code: record.stateCode };
+      }
+      if (!constituencies[record.Constituency]) {
+        constituencies[record.Constituency] = {
+          constituency: record.Constituency,
+          code: record.constituencyCode,
+        };
+      }
+      if (!candidates[record.Candidate]) {
+        candidates[record.Candidate] = {
+          candidate: record.Candidate,
+          constituency: record.Constituency,
+          party: record.Party,
+          state: record.State,
+        };
+      }
+    });
+    return {
+      data: {
+        states: Object.values(states),
+        candidates: Object.values(candidates),
+        constituencies: Object.values(constituencies),
+      },
+      success: true,
+    };
   } catch (e) {
     console.error("Error while getting the candidate data", e);
     return {
