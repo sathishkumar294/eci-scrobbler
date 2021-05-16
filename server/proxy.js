@@ -1,6 +1,7 @@
-const express = require("express");
-const request = require("request");
-const bodyParser = require("body-parser");
+import express from "express";
+import request from "request";
+import json from "body-parser";
+import { getAllConstituencyCandidateData } from "./extract-eci-info.js";
 
 const app = express();
 
@@ -8,22 +9,29 @@ const myLimit =
   typeof process.argv[2] !== "undefined" ? process.argv[2] : "100kb";
 console.log("Using limit: ", myLimit);
 
-app.use(bodyParser.json({ limit: myLimit }));
+app.use(json({ limit: myLimit }));
 
 app.use(function (request, response, next) {
   /**
    *  Set CORS headers: allow all origins, methods, and headers:
    *  you may want to lock this down in a production environment
    */
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, PUT, PATCH, POST, DELETE");
-  res.header(
+  response.header("Access-Control-Allow-Origin", "*");
+  response.header(
+    "Access-Control-Allow-Methods",
+    "GET, PUT, PATCH, POST, DELETE"
+  );
+  response.header(
     "Access-Control-Allow-Headers",
-    req.header("access-control-request-headers")
+    request.header("access-control-request-headers")
   );
 
   // Proceed
   next();
+});
+
+app.get("/getCandidateData", (request, response) => {
+  getAllConstituencyCandidateData().then((result) => response.send(result));
 });
 
 app.all("*", (req, res) => {
